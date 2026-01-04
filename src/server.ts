@@ -5,7 +5,7 @@ import colors from 'colors'
 
 
 // Conectar a abse de datos
-async function connectDB() {
+export async function connectDB() {
     try {
         await db.authenticate()
         db.sync()
