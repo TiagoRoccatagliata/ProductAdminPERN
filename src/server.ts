@@ -9,9 +9,7 @@ async function connectDB() {
     try {
         await db.authenticate()
         db.sync()
-        console.log(colors.green.bold('Conexion Exitosa DB'))
     } catch (error) {
-        // console.log(error)
         console.log(colors.red.bold('Error en DB'))
     }
 }
@@ -27,5 +25,9 @@ server.use(express.json())
 
 
 server.use("/api/products", router)
+
+server.get('/api', (req, res) => {
+    res.json({ msg: 'Desde API' })
+})
 
 export default server
