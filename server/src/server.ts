@@ -2,6 +2,7 @@ import express from 'express'
 import router from './routes'
 import db from './config/db'
 import colors from 'colors'
+import cors, { CorsOptions } from 'cors'
 
 
 // Conectar a abse de datos
@@ -19,6 +20,18 @@ connectDB()
 
 // Instancia de express
 const server = express()
+
+// Permitir conexiones
+const corsOptions: CorsOptions = {
+    origin: function (origin, callback) {
+        if (origin === 'http://localhost:5173') {
+            callback(null, true)
+        } else {
+            callback(new Error('Error de CORS'))
+        }
+    }
+}
+server.use(cors(corsOptions))
 
 // Leer datos de formularios
 server.use(express.json())
