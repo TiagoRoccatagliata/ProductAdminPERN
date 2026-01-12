@@ -3,6 +3,7 @@ import router from './routes'
 import db from './config/db'
 import colors from 'colors'
 import cors, { CorsOptions } from 'cors'
+import morgan from 'morgan'
 
 
 // Conectar a abse de datos
@@ -36,6 +37,7 @@ server.use(cors(corsOptions))
 // Leer datos de formularios
 server.use(express.json())
 
+server.use(morgan('dev'))
 
 server.use("/api/products", router)
 
