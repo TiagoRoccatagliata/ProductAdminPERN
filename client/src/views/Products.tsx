@@ -1,15 +1,24 @@
-import { Link, useLoaderData } from 'react-router-dom'
-import { getProducts } from '../services/ProductService'
+import { Link, useLoaderData, type ActionFunctionArgs } from 'react-router-dom'
+import { getProducts, updateAvailability } from '../services/ProductService'
+import ProductDetail from '../components/ProductDetail'
+import type { Product } from '../types'
 
+// eslint-disable-next-line react-refresh/only-export-components
 export async function loader() {
   const products = await getProducts()
   return products
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+export async function action({request} : ActionFunctionArgs) {
+  const data = Object.fromEntries(await request.formData())
+  await updateAvailability(+data.id)
+  return {}
+}
 
 export default function Products() {
 
-  const products = useLoaderData()
+  const products = useLoaderData() as Product[]
 
   return (
     <>
@@ -22,6 +31,28 @@ export default function Products() {
           Agregar Producto
         </Link>
       </div>
+
+      <div className="p-2">
+        <table className="w-full mt-5 table-auto">
+          <thead className="bg-slate-800 text-white">
+              <tr>
+                  <th className="p-2">Producto</th>
+                  <th className="p-2">Precio</th>
+                  <th className="p-2">Disponibilidad</th>
+                  <th className="p-2">Acciones</th>
+              </tr>
+          </thead>
+          <tbody>
+            {products.map(product => (
+              <ProductDetail 
+                key={product.id}
+                 product={product}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+
     </>
   )
 }
